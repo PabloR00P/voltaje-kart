@@ -1065,8 +1065,11 @@ function boot(){
   buildRoster();buildLevels();buildTracks();
   setSound(AU.on);
   $("snd").addEventListener("click",function(){setSound(!AU.on);sfx("tick")});
-  /* el navegador solo deja sonar después del primer toque o tecla */
+  /* intenta arrancar audio de inmediato; si el navegador lo bloquea, reintenta con cualquier gesto */
+  audioInit();
   window.addEventListener("pointerdown",audioInit);window.addEventListener("keydown",audioInit);
+  window.addEventListener("pointermove",audioInit,{once:true});
+  window.addEventListener("scroll",audioInit,{once:true});
   if(document.addEventListener)document.addEventListener("visibilitychange",function(){
     if(!AU.ctx)return;try{if(document.hidden)AU.ctx.suspend();else AU.ctx.resume()}catch(_){}
   });
